@@ -1,5 +1,4 @@
 # SimperlOTP 
-----------
 
 A simple PERL script for using OTP with **rlm_perl** FreeRadius 3.x module
 
@@ -199,7 +198,7 @@ We will attempt to authenticate **John Doe** (username: **johndoe**) which was i
 ### Generate a QR Code
 We will use [this website](https://freeotp.github.io/qrcode.html) to generate a QR code that will be imported in our app. 
 
-![](https://cydonia.audassia.com/Downloads/img/freeotp_generator.png)
+<img align="center" src="https://raw.githubusercontent.com/aleaforny/simperlotp/master/img/freeotp_generator.png">
 
 By default, we choose the following settings:
 
@@ -213,7 +212,7 @@ You are free to change the number of digits as well, but you will have to change
 ### Import the settings into the app
 From the app, you can directly scan the generated QR code in order to import directly the settings. After doing so, you should see:
 
-![](https://cydonia.audassia.com/Downloads/img/freeotp_added_otp.png)
+![](https://raw.githubusercontent.com/aleaforny/simperlotp/master/img/freeotp_added_otp.png)
 
 If you touch this entry, you will see a **6 digits OTP** that you can use for the authentication.
 
@@ -233,7 +232,7 @@ Get a **6-digits OTP** from the *FreeOTP* app. Within 30 seconds, type the follo
 
 You should get an ***Access-Accept***: 
 
-![](https://cydonia.audassia.com/Downloads/img/radtest_ok.png)
+![](https://raw.githubusercontent.com/aleaforny/simperlotp/master/img/radtest_ok.png)
 
 If you try the same command 30 seconds later, you should get an ***Access-Reject*** (with **OTP incorrect** as ***Reply-Message***). We will not explain the parameters of **radtest**. For more information, please check *man* or *FreeRadius* documentation. 
 
