@@ -240,8 +240,12 @@ You can try different scenario, like attempting the authentication with a wrong 
 
 ## Release History
 
- - **0.1** (10/05/2018)
+ - **0.1.1** (10/05/2018)
+	 - *Fixed a bug because the script was returning always REJECT if the user was not find during authorization*
+	 - *Now it will return UPDATED only during authorization unless if there was an error with the database*
+ - **0.1** (10/04/2018)
 	 - *First version*
+ 
 
 ## Contribute
 Please feel free to add comments and/or contribution to this script. I was not able to find a proper and simple script to implement this very useful OTP feature. **I have the strong belief that OTP should be easy and free to implement**, coupling with a *FreeRadius*, as security has become a major issue nowadays. 
