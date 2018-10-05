@@ -2,7 +2,7 @@
 #=============================================================================
 #    Title		:  	Simperl OTP
 #    Author		:  	Baptiste VANDENBORGHT
-#    Version	:  	0.1 (October 2018)
+#    Version	:  	0.1.1 (October 2018)
 #
 #   Description	:  	Perl module for Radius (using rlm_perl) integrating in a 
 #   				very simple way TOTP (Time-based One-Time Password). It 
@@ -31,12 +31,13 @@ our (%RAD_REQUEST, %RAD_REPLY, %RAD_CHECK, %RAD_STATE, %RAD_PERLCONF);
 
 #===========================================================================
 #  Declare the constants that will be handled by FreeRadius for processing
-#  (we use only 2 of them, OK and REJECT, but there are many more)
+#  (we use only 3 of them, OK, REJECT and UPDATED, but there are many more)
 #  (see FreeRadius documentation for more information)
 #===========================================================================
 use constant {
 	RLM_MODULE_REJECT   => 0, 
 	RLM_MODULE_OK       => 2,
+	RLM_MODULE_UPDATED  => 8,
 };
 
 #==========================================================================
@@ -117,7 +118,7 @@ sub authenticate {
 #===========================================================================
 # +------------------------------------------------------------
 # |		Name: 		get_user_from_database
-# |		Added on:	1.0
+# |		Added on:	0.1
 # |		Purpose:	This will retrieve the database from the 
 # |					Perlconf settings (check below and rlm_perl
 # |					configuration file) and it will serve two
@@ -272,16 +273,19 @@ sub generate_otp {
 sub end_perl_module {
 	my ($message, $radiusReturnCode);
 	
-	if ($SimperlOTP{'status'} > 1) {			
-		$radiusReturnCode = RLM_MODULE_REJECT;				# <--- For all statuses greater than 1, this Perl script shall always reject the client
+	if ($SimperlOTP{'status'} > 2) {			
+		$radiusReturnCode = RLM_MODULE_REJECT;				# <--- For all statuses greater than 2, this Perl script shall always reject the client
+	}
+	elsif ($SimperlOTP{'status'} == 1) {				
+		$radiusReturnCode = RLM_MODULE_OK;					# <--- If status is still equals to 0, then it means the update has only been updated
 	}
 	else {
-		$radiusReturnCode = RLM_MODULE_OK;
+		$radiusReturnCode = RLM_MODULE_UPDATED;
 	}
 	
 	switch ($SimperlOTP{'status'}) {
 		case 1		{ $message = "Welcome!" }
-		case 2		{ $message = "Username is incorrect" }
+		case 2		{ $message = "OTP User was not found!" }
 		case 3		{ $message = "Something went wrong with the database" }
 		case 4		{ $message = "Password is incorrect" }
 		case 5		{ $message = "OTP is incorrect" }
