@@ -1,0 +1,24 @@
+# -*- text -*-
+#
+#  $Id: put_here_the_id_of_the_original_file $
+
+#  Persistent, embedded Perl interpreter.
+#
+perl {
+	#  Specify here the SimperlOTP script that will be used.
+	#  It should be located in /etc/raddb/mods-config/perl/
+	#  and be owned by root:radiusd (CentOS configuration)
+	filename = ${modconfdir}/${.:instance}/simperlotp.pl
+
+	#  Specify here all the information needed for the 
+	#  database connection. For now, it supports only MySQL
+	#  backend. It will retrieve otpusers table (you can change
+	#  it in the script)
+	config {
+		db {
+			name = "put_here_database_name"
+			user = "put_here_database_user"
+			password = "put_here_database_password"
+		}
+	}
+}
