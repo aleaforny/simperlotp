@@ -273,8 +273,8 @@ sub send_success_email {
 	my $raduser = $RAD_REQUEST{'User-Name'};
 
 	my $msg = MIME::Lite->new(
-		From     => 'noreply@audassia.com',
-		To       => 'bvandenborght@audassia.com',
+		From     => 'youchoose@test.com',
+		To       => 'youchoose@test.com',
 		Subject  => 'Successful Login From RADIUS',
 		Type     => 'TEXT',
 		Data     => "The client $raduser has successfully been authed by RADIUS to this system"
