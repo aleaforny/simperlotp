@@ -1,6 +1,6 @@
 # -*- text -*-
 #
-#  $Id: put_here_the_id_of_the_original_file $
+#  $Id: a4c166ebc256a9b0007249346bdf615bdd8229df $
 
 #  Persistent, embedded Perl interpreter.
 #
@@ -19,6 +19,12 @@ perl {
 			name = "put_here_database_name"
 			user = "put_here_database_user"
 			password = "put_here_database_password"
+		}
+		smtp {
+			server = "server.com"
+			port = 25
+			user = "myaccount@account.com"
+			pwd = "password"
 		}
 	}
 }
