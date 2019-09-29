@@ -2,7 +2,7 @@
 #=============================================================================
 #    Title		:  	Simperl OTP
 #    Author		:  	Baptiste VANDENBORGHT
-#    Version	:  	0.1.1 (October 2018)
+#    Version	:  	0.1.2 (September 2019)
 #
 #   Description	:  	Perl module for Radius (using rlm_perl) integrating in a 
 #   				very simple way TOTP (Time-based One-Time Password). It 
@@ -17,12 +17,16 @@ use warnings;
 #  Importing all required Perl Modules (see installation)
 #===========================================================================
 use Authen::OATH;
+use Authen::SASL;
 use Convert::Base32 qw( decode_base32 );
 use Crypt::CBC   qw( );
 use DBI;
+use MIME::Base64;
 use MIME::Base64 qw( decode_base64 );
+use MIME::Lite;
 use Switch;
 use Try::Tiny;
+
 
 #===========================================================================
 #  Declare the global hashes from Radius (see FreeRadius documentation)
@@ -252,6 +256,34 @@ sub generate_otp {
 }
 
 # +------------------------------------------------------------
+# |		Name: 		send_success_email
+# |		Added on: 	0.1.2
+# |		Purpose:	This sends an email message with sucess
+# |					to a specified administrator
+# +------------------------------------------------------------
+# | PARAMETERS
+# +------------------------------------------------------------
+# |		none
+# +------------------------------------------------------------
+# | RETURN 
+# +------------------------------------------------------------
+# |		none
+# +------------------------------------------------------------
+sub send_success_email {
+	my $raduser = $RAD_REQUEST{'User-Name'};
+
+	my $msg = MIME::Lite->new(
+		From     => 'noreply@audassia.com',
+		To       => 'bvandenborght@audassia.com',
+		Subject  => 'Successful Login From RADIUS',
+		Type     => 'TEXT',
+		Data     => "The client $raduser has successfully been authed by RADIUS to this system"
+	);
+	
+	$msg->send('smtp',$RAD_PERLCONF{'smtp'}->{'server'}, Port=>$RAD_PERLCONF{'smtp'}->{'port'}, AuthUser=>$RAD_PERLCONF{'smtp'}->{'user'}, AuthPass=>$RAD_PERLCONF{'smtp'}->{'pwd'});
+}
+
+# +------------------------------------------------------------
 # |		Name: 		end_perl_module
 # |		Added on: 	0.1
 # |		Purpose:	This ends this Perl script with a return code
@@ -284,7 +316,7 @@ sub end_perl_module {
 	}
 	
 	switch ($SimperlOTP{'status'}) {
-		case 1		{ $message = "Welcome!" }
+		case 1		{ $message = "Welcome!"; send_success_email(); }
 		case 2		{ $message = "OTP User was not found!" }
 		case 3		{ $message = "Something went wrong with the database" }
 		case 4		{ $message = "Password is incorrect" }
